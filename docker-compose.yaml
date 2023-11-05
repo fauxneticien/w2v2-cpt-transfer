@@ -1,0 +1,23 @@
+version: "3.9"
+
+name: w2v2-cpt-transfer
+
+services:
+  w2v2-cpt-transfer:
+    image: fauxneticien/fairseq-asr
+    volumes:
+      - ${PWD}:/workspace
+    working_dir: /workspace
+    entrypoint:
+      - /bin/bash
+    stdin_open: true
+    tty: true
+    # Default shm_size of 64mb is too small for distributed training
+    shm_size: '16gb'
+    # Service must be network host for distributed training
+    network_mode: host
+    deploy:
+      resources:
+        reservations:
+          devices:
+            - capabilities: [gpu]
