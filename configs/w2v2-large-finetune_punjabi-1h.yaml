@@ -19,7 +19,7 @@ task:
 dataset:
   num_workers: 6
   # max_tokens: 1400000
-  max_tokens: 2800000
+  max_tokens: 5600000
   skip_invalid_size_inputs_valid_test: true
   validate_interval: 10000
   validate_interval_updates: 1000
@@ -34,9 +34,9 @@ criterion:
 
 optimization:
   max_update: 13000
-  lr: [0.0003]
+  lr: [0.00005]
   sentence_avg: true
-  update_freq: [5]
+  update_freq: [2]
 
 optimizer:
   _name: adam
@@ -45,7 +45,7 @@ optimizer:
 
 lr_scheduler:
   _name: tri_stage
-  phase_ratio: [0.1, 0.4, 0.5]
+  phase_ratio: [0.1, 0.65, 0.25]
   final_lr_scale: 0.05
 
 model:
@@ -55,7 +55,7 @@ model:
   mask_prob: 0.75
   mask_channel_prob: 0.25
   mask_channel_length: 64
-  freeze_finetune_updates: 6500
+  freeze_finetune_updates: 10000
   layerdrop: 0.1
   activation_dropout: 0.1
   feature_grad_mult: 0.0
