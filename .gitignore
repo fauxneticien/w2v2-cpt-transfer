@@ -1,3 +1,11 @@
+.vscode
 data/*
 !data/.gitkeep
 outputs/*
+tmp/*
+!tmp/.gitkeep
+checkpoints/*
+!checkpoints/.gitkeep
+__pycache__
+.ipynb_checkpoints
+configs/vscode-debug.yaml
