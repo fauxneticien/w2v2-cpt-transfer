@@ -7,6 +7,9 @@ common:
 
 checkpoint:
   finetune_from_model: /workspace/checkpoints/xlsr2_300m.pt
+  # Save every 500 epochs (i.e. never during 10k training updates)
+  save_interval: 500
+  # Save based on update steps
   save_interval_updates: 2500
   keep_interval_updates: 5
   no_epoch_checkpoints: true
@@ -24,7 +27,10 @@ dataset:
   # max_tokens for 40GB A100 GPUs
   max_tokens: 1500000
   skip_invalid_size_inputs_valid_test: true
-  validate_interval_updates: 2500
+  # Validate every 500 epochs (i.e. never during 10k training updates)
+  validate_interval: 500
+  # Validate based on update steps
+  validate_interval_updates: 1000
   train_subset: ???
   valid_subset: punjabi_valid
 
