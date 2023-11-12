@@ -1,26 +1,32 @@
 common:
   fp16: true
-  log_format: json
-  log_interval: 200
+  log_format: tqdm
+  log_interval: 50
+  user_dir: /workspace/custom_task
+  wandb_project: w2v2-cpt-transfer_pretraining
 
 checkpoint:
+  finetune_from_model: /workspace/checkpoints/xlsr2_300m.pt
   save_interval_updates: 2500
   keep_interval_updates: 5
   no_epoch_checkpoints: true
 
 task:
-  _name: audio_pretraining
-  data: ???
+  _name: temp_sampled_audio_pretraining
+  sampling_alpha: 0.05
+  data: /workspace/data/manifests/pretrain/
   max_sample_size: 240000
   min_sample_size: 16000
   normalize: true
 
 dataset:
-  num_workers: 6
+  num_workers: 8
   # max_tokens for 40GB A100 GPUs
-  max_tokens: 1400000
+  max_tokens: 1500000
   skip_invalid_size_inputs_valid_test: true
   validate_interval_updates: 2500
+  train_subset: ???
+  valid_subset: punjabi_valid
 
 distributed_training:
   ddp_backend: no_c10d
