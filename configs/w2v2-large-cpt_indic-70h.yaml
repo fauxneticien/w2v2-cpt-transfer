@@ -7,16 +7,16 @@ common:
 
 checkpoint:
   finetune_from_model: /workspace/checkpoints/xlsr2_300m.pt
-  # Save every 500 epochs (i.e. never during 10k training updates)
-  save_interval: 500
+  # Save every 5000 epochs (i.e. never during 10k training updates)
+  save_interval: 5000
   # Save based on update steps
-  save_interval_updates: 2500
+  save_interval_updates: 5000
   keep_interval_updates: 5
   no_epoch_checkpoints: true
 
 task:
   _name: temp_sampled_audio_pretraining
-  sampling_alpha: 0.05
+  sampling_alpha: 0.00
   data: /workspace/data/manifests/pretrain/
   max_sample_size: 240000
   min_sample_size: 16000
@@ -27,12 +27,12 @@ dataset:
   # max_tokens for 40GB A100 GPUs
   max_tokens: 1500000
   skip_invalid_size_inputs_valid_test: true
-  # Validate every 500 epochs (i.e. never during 10k training updates)
-  validate_interval: 500
+  # Validate every 5000 epochs (i.e. never during 10k training updates)
+  validate_interval: 5000
   # Validate based on update steps
   validate_interval_updates: 1000
   train_subset: ???
-  valid_subset: punjabi_valid
+  valid_subset: punjabi_valid-1h
 
 distributed_training:
   ddp_backend: no_c10d
@@ -46,7 +46,7 @@ criterion:
 optimization:
   max_update: 10000
   lr: [0.0001]
-  update_freq: [32]
+  update_freq: [16]
 
 optimizer:
   _name: adam
@@ -56,7 +56,7 @@ optimizer:
 
 lr_scheduler:
   _name: polynomial_decay
-  warmup_updates: 7500
+  warmup_updates: 10000
 
 model:
   _name: wav2vec2
