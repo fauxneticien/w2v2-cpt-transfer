@@ -13,7 +13,7 @@ checkpoint:
 
 task:
   _name: audio_finetuning
-  data: /workspace/data/manifests/finetune_punjabi-1h
+  data: /workspace/data/manifests/finetune/punjabi
   labels: ltr
   normalize: true
 
