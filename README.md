@@ -22,7 +22,7 @@ The corresponding audio (several hundred gigabytes) should be sourced from the o
 - Iban: https://openslr.magicdatatech.com/24/
 - MASS (Malay): requires request to MASS corpus compiler ([Tan Tien Ping](https://cs.usm.my/index.php/faculty-member/203-tan-tien-ping-dr))
 
-The pre-training/fine-tuning scripts will expect the files to be in the location as specified by the top line in the manifest `*.tsv` files (example from `data/manifests/pretrain/punjabi_train-10h.tsv`):
+The pre-training/fine-tuning scripts will expect the files to be in the location as specified by the top line in the manifest `*.tsv` files (example from `data/manifests/pretrain/punjabi_train-10h.tsv`). The first column is the filepath relative to the path in the top line and the second column is the number of samples in the audio file (expected to be sampled at 16 kHz mono PCM wav).
 
 ```tsv
 /workspace/data/IndicSUPERB/punjabi/audio
