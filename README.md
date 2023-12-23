@@ -22,6 +22,19 @@ The corresponding audio (several hundred gigabytes) should be sourced from the o
 - Iban: https://openslr.magicdatatech.com/24/
 - MASS (Malay): requires request to MASS corpus compiler ([Tan Tien Ping](https://cs.usm.my/index.php/faculty-member/203-tan-tien-ping-dr))
 
+The pre-training/fine-tuning scripts will expect the files to be in the location as specified by the top line in the manifest `*.tsv` files (example from `data/manifests/pretrain/punjabi_train-10h.tsv`):
+
+```tsv
+/workspace/data/IndicSUPERB/punjabi/audio
+844424933625601-500-m.wav       133747
+844424931325353-1163-f.wav      100682
+844424930912543-812-f.wav       48298
+844424932948471-775-f.wav       87679
+844424931479700-1200-f.wav      80991
+844424930793842-396-f.wav       75790
+844424932569389-703-f.wav       55357
+```
+
 ### Experiment artefacts
 
 All experiment artefacts are available on Zenodo: https://zenodo.org/communities/w2v2-cpt-transfer.
@@ -70,6 +83,8 @@ fairseq-hydra-train \
     --config-name w2v2-large-cpt_indic-70h \
     dataset.train_subset='punjabi_train-10h,malayalam_train-60h-seed-1'
 ```
+
+*Note:* If you use the `custom_task` for continued pre-training (as is the default configuration in `configs/w2v2-large-cpt_indic-70h.yaml`), run `python scripts/convert-checkpoint.py my-checkpoint.pt` before fine-tuning. Otherwise `fairseq-hydra-train` won't recognize it as a 'real' wav2vec 2.0 checkpoint.
 
 #### Fine-tuning
 
