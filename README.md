@@ -44,19 +44,69 @@ Since each wav2vec 2.0 checkpoint is about 3.8 GB and there were 53 checkpoints 
 
 All analyses are reproducible from the experiment artefacts. Each analysis is a self contained notebook located in the analyses folder.
 
-## Training your own models
-
-### Data preparation
-
-Since we're using the [fairseq](https://github.com/facebookresearch/fairseq) library for pre-training and fine-tuning, the data will need to be in the format expected by fairseq. The actual manifests used in our experiments are available as examples in `data/manifests/pretrain` and `data/manifests/finetune`.
-
-### Environment
+## Compute environment
 
 We provide a Docker image with all the necessary dependencies installed. To start the container, run:
 
 ```
 docker-compose run w2v2-cpt-transfer
 ```
+
+## ATDS calculations
+
+### Extract XLSR-128 embeddings
+
+The following commands will select a random 5 hour sample of audio from `wav-dir` and extract embeddings from the 12th layer of the XLSR-128 model.
+
+```
+# Extract embeddings for Punjabi (target)
+python scripts/extract_embeddings.py \
+    --checkpoint-path checkpoints/xlsr2_300m.pt \
+    --wav-dir data/IndicSUPERB/punjabi/audio \
+    --num-hours 5 \
+    --output-parquet tmp/punjabi.parquet
+
+# Extract embeddings for Hindi (candidate donor)
+python scripts/extract_embeddings.py \
+    --checkpoint-path checkpoints/xlsr2_300m.pt \
+    --wav-dir data/IndicSUPERB/hindi/audio \
+    --num-hours 5 \
+    --output-parquet tmp/hindi.parquet
+```
+
+### Learn k-means on target data
+
+```
+python scripts/learn_k-means.py \
+    tmp/punjabi.parquet \
+    tmp/k-means_punjabi.joblib
+```
+
+### Use k-means model to cluster both target and donor embeddings
+
+```
+# Cluster Punjabi embeddings
+python scripts/infer_k-means.py \
+    tmp/k-means_punjabi.joblib \
+    tmp/punjabi.parquet \
+    tmp/punjabi-clustered.parquet
+
+# Cluster Punjabi embeddings
+python scripts/infer_k-means.py \
+    tmp/k-means_punjabi.joblib \
+    tmp/hindi.parquet \
+    tmp/hindi-clustered.parquet
+```
+
+### Calculate ATDS
+
+See example in `analyses/analysis_ATDS.ipynb`
+
+## Training your own models
+
+### Data preparation
+
+Since we're using the [fairseq](https://github.com/facebookresearch/fairseq) library for pre-training and fine-tuning, the data will need to be in the format expected by fairseq. The actual manifests used in our experiments are available as examples in `data/manifests/pretrain` and `data/manifests/finetune`.
 
 ### Model training
 
